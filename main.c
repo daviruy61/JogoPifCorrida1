@@ -20,6 +20,8 @@ typedef struct node Node;
 typedef struct node* Lista;
 
 // Protótipos de funções
+void waitSeconds(int seconds);
+void clearKeyboardBuffer();
 void lst_init(Lista* refLista);
 Boolean lst_addLast(Lista* refLista, Info dado);
 void lst_removeFirst(Lista* refLista);
@@ -34,36 +36,68 @@ int main() {
     keyboardInit();
     timerInit(100);
 
-    int choice;
+    int currentSelection = 1;
+    const int maxOptions = 3;
+
     do {
         screenClear();
         screenGotoxy(10, 5);
-        printf("1 - Iniciar Jogo\n2 - Exibir Ranking\n0 - Sair\n");
+        printf("Escolha uma opção:\n");
+        for (int i = 1; i <= maxOptions; i++) {
+            if (currentSelection == i) {
+                screenGotoxy(9, 5 + i);
+                printf(">");
+            }
+            screenGotoxy(10, 5 + i);
+            if (i == 1) printf("Iniciar Jogo\n");
+            else if (i == 2) printf("Exibir Ranking\n");
+            else if (i == 3) printf("Sair\n");
+        }
         screenUpdate();
 
-        // Espera por uma tecla de forma ativa
-        while (!keyhit()) {
-            // Apenas loop até que uma tecla seja pressionada.
-            // Aqui você poderia opcionalmente adicionar um timer para atualizar a tela ou outra lógica não bloqueante
+        clearKeyboardBuffer();  // Limpa o buffer antes de ler a nova entrada
+        char key = '\0';
+        while (!keyhit()) {  // Espera por uma tecla de forma ativa
+            // Loop vazio até que uma tecla seja pressionada
         }
-        choice = readch() - '0'; // Lê a escolha do usuário e converte para int
+        key = readch();
 
-        switch (choice) {
-            case 1:
-                iniciarJogo();
-                break;
-            case 2:
-                exibirRanking();
-                break;
-            case 0:
-                break;
+        // Navegação no menu
+        if (key == 'w' && currentSelection > 1) currentSelection--;
+        else if (key == 's' && currentSelection < maxOptions) currentSelection++;
+        else if (key == '\n') {  // Enter para selecionar a opção
+            switch (currentSelection) {
+                case 1:
+                    iniciarJogo();
+                    break;
+                case 2:
+                    exibirRanking();
+                    break;
+                case 3:
+                    goto endProgram;  // Sair do programa
+            }
         }
-    } while (choice != 0);
+    } while (TRUE);
 
+endProgram:
     screenDestroy();
     keyboardDestroy();
     timerDestroy();
     return 0;
+}
+
+
+void waitSeconds(int seconds) {
+    timerInit(seconds * 1000);  // Inicia um timer para o número total de milissegundos
+    while (!timerTimeOver()) {
+        // Aguarda o timer expirar
+    }
+}
+
+void clearKeyboardBuffer() {
+    while (keyhit()) {
+        readch();  // Limpa todos os caracteres pendentes
+    }
 }
 
 void lst_init(Lista* refLista) {
