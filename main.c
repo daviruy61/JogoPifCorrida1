@@ -1,79 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
 
-int x = 34, y = 12; // Posições iniciais do texto na tela.
-int incX = 1, incY = 1; // Incrementos para mover o texto.
-
-void printHello(int nextX, int nextY); // Função para imprimir "Hello World" na nova posição.
-{
-    screenSetColor(CYAN, DARKGRAY);
-    screenGotoxy(x, y);
-    printf("           ");
-    x = nextX;
-    y = nextY;
-    screenGotoxy(x, y);
-    printf("Hello World");
-}
-
-void printKey(int ch)  // Função para exibir o código da tecla pressionada.
-{
-    screenSetColor(YELLOW, DARKGRAY);
-    screenGotoxy(35, 22);
-    printf("Key code :");
-
-    screenGotoxy(34, 23);
-    printf("            ");
-    
-    if (ch == 27) screenGotoxy(36, 23);
-    else screenGotoxy(39, 23);
-
-    printf("%d ", ch);
-    while (keyhit())
-    {
-        printf("%d ", readch());
-    }
-}
-
 int main() {
-    static int ch = 0;
+    int running = 1;
+    int x = 10, y = 10; // Posição inicial da mensagem
+    int ch; // Armazena o último caractere lido
 
-    // Inicialização de módulos
-    screenInit(1); // Inicializa a tela e desenha bordas.
-    keyboardInit(); // Configura o teclado para entrada não-canônica.
-    timerInit(50); // Configura o timer para atualizar a cada 50ms.
+    // Inicialização das bibliotecas
+    screenInit(1); // Inicializa a tela com bordas
+    keyboardInit(); // Inicializa o teclado para leitura não bloqueante
+    timerInit(100); // Configura o timer para 100 ms
 
-    printHello(x, y); // Exibe "Hello World" na posição inicial.
-    screenUpdate(); // Atualiza a tela para refletir as mudanças.
+    // Loop principal do jogo
+    while (running) {
+        screenClear(); // Limpa a tela
+        screenGotoxy(x, y); // Move o cursor para a posição (x, y)
+        printf("Hello"); // Imprime a mensagem
+        screenUpdate(); // Atualiza a tela
 
-    // Loop principal
-    while (ch != 10) { // Continua até que 'Enter' (código 10) seja pressionado.
-        // Handle user input
-        if (keyhit()) { // Verifica se uma tecla foi pressionada.
-            ch = readch(); // Lê o código da tecla pressionada.
-            printKey(ch); // Exibe o código da tecla.
-            screenUpdate(); // Atualiza a tela.
+        if (keyhit()) { // Verifica se uma tecla foi pressionada
+            ch = readch(); // Lê a tecla pressionada
+            switch (ch) {
+                case 'q': // Sai do jogo
+                    running = 0;
+                    break;
+                case 'w': // Move para cima
+                    y = y > 1 ? y - 1 : y;
+                    break;
+                case 's': // Move para baixo
+                    y = y < (MAXY - 1) ? y + 1 : y;
+                    break;
+                case 'a': // Move para a esquerda
+                    x = x > 1 ? x - 1 : x;
+                    break;
+                case 'd': // Move para a direita
+                    x = x < (MAXX - 1) ? x + 1 : x;
+                    break;
+            }
         }
 
-        // Update game state (move elements, verify collision, etc)
-        if (timerTimeOver() == 1) { // Verifica se o timer expirou.
-            int newX = x + incX; // Calcula a nova posição X.
-            int newY = y + incY; // Calcula a nova posição Y.
-
-            // Verifica colisão com as bordas da tela e inverte a direção se necessário.
-            if (newX >= (MAXX - strlen("Hello World") - 1) || newX <= MINX+1) incX = -incX;
-            if (newY >= MAXY-1 || newY <= MINY+1) incY = -incY;
-
-            printHello(newX, newY); // Move "Hello World" para a nova posição.
-            screenUpdate(); // Atualiza a tela.
+        if (timerTimeOver()) { // Verifica se o tempo do timer expirou
+            // Aqui você pode adicionar qualquer lógica que dependa do tempo
         }
     }
 
-    // Finalização
-    keyboardDestroy(); // Restaura configurações do teclado.
-    screenDestroy(); // Limpa e restaura a tela.
-    timerDestroy(); // Desativa o timer.
+    // Limpeza e saída
+    screenDestroy(); // Restaura as configurações de tela originais
+    keyboardDestroy(); // Restaura as configurações de teclado originais
+    timerDestroy(); // Desativa o timer
 
-    return 0; // Termina o programa.
+    return 0;
 }
