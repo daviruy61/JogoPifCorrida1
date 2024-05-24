@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_TRACKS 4
+#define MAX_TRACKS 6
 #define TRACK_LENGTH 40
 
 void initializeGame();
@@ -36,7 +36,9 @@ void initializeGame() {
     strcpy(track[0], "========================================"); // Linha superior
     strcpy(track[1], "----------------------------------------"); // Primeira linha interna
     strcpy(track[2], "----------------------------------------"); // Segunda linha interna
-    strcpy(track[3], "========================================"); // Linha inferior
+    strcpy(track[3], "----------------------------------------"); // Linha inferior
+    strcpy(track[4], "----------------------------------------");
+    strcpy(track[5], "========================================");
 }
 
 void runGame() {
@@ -49,7 +51,7 @@ void runGame() {
             key = readch();
             if (key == 'w' && playerTrack > 0) {
                 movePlayer(-1);
-            } else if (key == 's' && playerTrack < 2) {
+            } else if (key == 's' && playerTrack < 4) {
                 movePlayer(1);
             }
         }
@@ -75,15 +77,15 @@ void updateObstacles() {
 }
 
 void displayGame(int playerTrack) {
-    int baseLine = 5; // Base line for display
+    int baseLine = 3; // Base line for display
     int lineSpacing = 2; // Line spacing for better visibility
     for (int i = 0; i < MAX_TRACKS; i++) {
-        screenGotoxy(10, baseLine + i * lineSpacing); //gotoxy x=colunas e y=linhas
+        screenGotoxy(12, baseLine + i * lineSpacing); //gotoxy x=colunas e y=linhas
         printf("%s", track[i]);
         fflush(stdout);
     }
     // Posiciona o jogador entre as linhas, não diretamente sobre elas
-    screenGotoxy(10, baseLine + (playerTrack * lineSpacing) + 1);
+    screenGotoxy(12, baseLine + (playerTrack * lineSpacing) + 1);
     printf(">");
     fflush(stdout);
 }
