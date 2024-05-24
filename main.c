@@ -5,18 +5,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_TRACKS 3
+#define MAX_TRACKS 4
 #define TRACK_LENGTH 20
 
-// Protótipos de funções
 void initializeGame();
 void runGame();
 void movePlayer(int direction);
 void updateObstacles();
 void displayGame(int playerTrack);
 
-int playerTrack = 1;  // Começa na pista do meio (0 = superior, 1 = meio, 2 = inferior)
-char track[MAX_TRACKS][TRACK_LENGTH + 1];  // 3 pistas, cada uma com TRACK_LENGTH posições
+int playerTrack = 1;  // Começa entre track[0] e track[1]
+char track[MAX_TRACKS][TRACK_LENGTH + 1];  // 4 pistas
 
 int main() {
     screenInit(1);
@@ -34,17 +33,10 @@ int main() {
 }
 
 void initializeGame() {
-    for (int i = 0; i < MAX_TRACKS; i++) {
-        // Definindo a borda superior
-        for (int j = 0; j < TRACK_LENGTH; j++) {
-            track[i][j] = (j % 2 == 0) ? '=' : ' ';
-        }
-        track[i][TRACK_LENGTH] = '\0';  // Terminador de string
-    }
-    // Definindo as linhas internas
-    for (int j = 0; j < TRACK_LENGTH; j++) {
-        track[1][j] = (j % 2 == 0) ? '-' : ' ';  // Linha intermediária
-    }
+    strcpy(track[0], "===================="); // Linha superior
+    strcpy(track[1], "--------------------"); // Primeira linha interna
+    strcpy(track[2], "--------------------"); // Segunda linha interna
+    strcpy(track[3], "===================="); // Linha inferior
 }
 
 void runGame() {
@@ -57,7 +49,7 @@ void runGame() {
             key = readch();
             if (key == 'w' && playerTrack > 0) {
                 movePlayer(-1);
-            } else if (key == 's' && playerTrack < MAX_TRACKS - 1) {
+            } else if (key == 's' && playerTrack < 2) {
                 movePlayer(1);
             }
         }
@@ -67,29 +59,31 @@ void runGame() {
         }
 
         screenUpdate();
-        timerUpdateTimer(100);  // Reinicia o timer para 100ms
-    } while (key != 'q');  // Pressione 'q' para sair
+        timerUpdateTimer(100);
+    } while (key != 'q');
 }
 
 void movePlayer(int direction) {
-    playerTrack += direction;
+    playerTrack += direction;  // Ajuste para que o jogador se mova apenas entre as linhas
 }
 
 void updateObstacles() {
     for (int i = 0; i < MAX_TRACKS; i++) {
-        memmove(&track[i][0], &track[i][1], TRACK_LENGTH - 1);  // Move tudo para a esquerda
-        track[i][TRACK_LENGTH - 1] = (rand() % 10 < 2) ? '#' : track[i][TRACK_LENGTH - 2];  // Adiciona obstáculos aleatoriamente
+        memmove(&track[i][0], &track[i][1], TRACK_LENGTH - 1);
+        track[i][TRACK_LENGTH - 1] = (rand() % 10 < 2) ? '#' : track[i][TRACK_LENGTH - 2];
     }
 }
 
 void displayGame(int playerTrack) {
+    int baseLine = 5; // Base line for display
+    int lineSpacing = 2; // Line spacing for better visibility
     for (int i = 0; i < MAX_TRACKS; i++) {
-        screenGotoxy(10, 5 + i * 2);  // Ajustado para ter espaço entre as pistas
+        screenGotoxy(10, baseLine + i * lineSpacing);
         printf("%s", track[i]);
-        fflush(stdout);  // Força a descarga do buffer após cada linha ser impressa
+        fflush(stdout);
     }
-    // Posiciona o jogador entre as linhas
-    screenGotoxy(10, 6 + playerTrack * 2);
+    // Posiciona o jogador entre as linhas, não diretamente sobre elas
+    screenGotoxy(10, baseLine + (playerTrack * lineSpacing) + 1);
     printf(">");
     fflush(stdout);
 }
