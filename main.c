@@ -15,7 +15,7 @@ void updateObstacles();
 void displayGame(int playerTrack);
 
 int playerTrack = 1;  // Começa entre track[0] e track[1]
-char track[MAX_TRACKS][TRACK_LENGTH + 1];  // 4 pistas
+char track[MAX_TRACKS][TRACK_LENGTH + 1];  // para aumentar/diminuir numero de pistas mude o MAX_TRACKS e a quantidade de caracteres nos arrays track
 
 int main() {
     screenInit(1);
