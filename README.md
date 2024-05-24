@@ -10,6 +10,7 @@ Logo em seguida, digitar essa segunda linha:
 ```
 **./corrida**
 ```
+
 - INICIANDO O JOGO
 
 1. A Corrida 2D abrirá um painel em que é possível selecionar 3 opções: 1-Iniciar, 2-Ranking e 3-Sair.
