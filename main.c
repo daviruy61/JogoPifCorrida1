@@ -78,7 +78,7 @@ void displayGame(int playerTrack) {
     int baseLine = 5; // Base line for display
     int lineSpacing = 2; // Line spacing for better visibility
     for (int i = 0; i < MAX_TRACKS; i++) {
-        screenGotoxy(10, baseLine + i * lineSpacing);
+        screenGotoxy(10, baseLine + i * lineSpacing); //gotoxy x=colunas e y=linhas
         printf("%s", track[i]);
         fflush(stdout);
     }
@@ -87,3 +87,4 @@ void displayGame(int playerTrack) {
     printf(">");
     fflush(stdout);
 }
+
