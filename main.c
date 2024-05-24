@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define MAX_TRACKS 4
-#define TRACK_LENGTH 20
+#define TRACK_LENGTH 40
 
 void initializeGame();
 void runGame();
@@ -33,10 +33,10 @@ int main() {
 }
 
 void initializeGame() {
-    strcpy(track[0], "===================="); // Linha superior
-    strcpy(track[1], "--------------------"); // Primeira linha interna
-    strcpy(track[2], "--------------------"); // Segunda linha interna
-    strcpy(track[3], "===================="); // Linha inferior
+    strcpy(track[0], "========================================"); // Linha superior
+    strcpy(track[1], "----------------------------------------"); // Primeira linha interna
+    strcpy(track[2], "----------------------------------------"); // Segunda linha interna
+    strcpy(track[3], "========================================"); // Linha inferior
 }
 
 void runGame() {
@@ -87,4 +87,3 @@ void displayGame(int playerTrack) {
     printf(">");
     fflush(stdout);
 }
-
