@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_TRACKS 6
-#define TRACK_LENGTH 40
+#define PISTAS 6
+#define DISTANCIA_PISTA 40
 
 void initializeGame();
 void runGame();
@@ -14,8 +14,8 @@ void movePlayer(int direction);
 void updateObstacles();
 void displayGame(int playerTrack);
 
-int playerTrack = 1;  // Começa entre track[0] e track[1]
-char track[MAX_TRACKS][TRACK_LENGTH + 1];  // para aumentar/diminuir numero de pistas mude o MAX_TRACKS e a quantidade de caracteres nos arrays track
+int playerTrack = 1;  // Começa entre track[1] e track[2]
+char track[PISTAS][DISTANCIA_PISTA + 1];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
 
 int main() {
     screenInit(1);
@@ -33,10 +33,10 @@ int main() {
 }
 
 void initializeGame() {
-    strcpy(track[0], "========================================"); // Linha superior
-    strcpy(track[1], "----------------------------------------"); // Primeira linha interna
-    strcpy(track[2], "----------------------------------------"); // Segunda linha interna
-    strcpy(track[3], "----------------------------------------"); // Linha inferior
+    strcpy(track[0], "========================================"); // pistas
+    strcpy(track[1], "----------------------------------------"); 
+    strcpy(track[2], "----------------------------------------"); 
+    strcpy(track[3], "----------------------------------------"); 
     strcpy(track[4], "----------------------------------------");
     strcpy(track[5], "========================================");
 }
@@ -49,9 +49,9 @@ void runGame() {
 
         if (keyhit()) {
             key = readch();
-            if (key == 'w' && playerTrack > 0) {
+            if ((key == 'w' || key == 'W') && playerTrack > 0) {
                 movePlayer(-1);
-            } else if (key == 's' && playerTrack < 4) {
+            } else if ((key == 's' || key == 'S') && playerTrack < PISTAS - 2) {
                 movePlayer(1);
             }
         }
@@ -70,16 +70,16 @@ void movePlayer(int direction) {
 }
 
 void updateObstacles() {
-    for (int i = 0; i < MAX_TRACKS; i++) {
-        memmove(&track[i][0], &track[i][1], TRACK_LENGTH - 1);
-        track[i][TRACK_LENGTH - 1] = (rand() % 10 < 2) ? '#' : track[i][TRACK_LENGTH - 2];
+    for (int i = 0; i < PISTAS; i++) {
+        memmove(&track[i][0], &track[i][1], DISTANCIA_PISTA - 1);
+        track[i][DISTANCIA_PISTA - 1] = (rand() % 10 < 2) ? '#' : track[i][DISTANCIA_PISTA - 2];
     }
 }
 
 void displayGame(int playerTrack) {
     int baseLine = 3; // Base line for display
     int lineSpacing = 2; // Line spacing for better visibility
-    for (int i = 0; i < MAX_TRACKS; i++) {
+    for (int i = 0; i < PISTAS; i++) {
         screenGotoxy(12, baseLine + i * lineSpacing); //gotoxy x=colunas e y=linhas
         printf("%s", track[i]);
         fflush(stdout);
