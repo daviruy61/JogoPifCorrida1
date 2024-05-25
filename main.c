@@ -14,6 +14,7 @@ void movePlayer(int direction);
 void updateObstacles();
 void displayGame(int playerTrack);
 
+int score = 0; //pontuação inicial
 int playerTrack = 1;  // Começa entre track[1] e track[2]
 char track[PISTAS][DISTANCIA_PISTA + 1];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
 
@@ -45,7 +46,7 @@ void runGame() {
     char key;
     do {
         screenClear();
-        displayGame(playerTrack);
+        displayGame(playerTrack); //exibe o jogo
 
         if (keyhit()) {
             key = readch();
@@ -57,13 +58,16 @@ void runGame() {
         }
 
         if (timerTimeOver()) {
-            updateObstacles();
+            //updateObstacles();   Atualiza os obstáculos (ignorado por agora)
+            score++;  // Incrementa a pontuação
+            timerUpdateTimer(100);  // Reinicia o temporizador para 100 milissegundos
         }
 
         screenUpdate();
-        timerUpdateTimer(100);
     } while (key != 'q');
 }
+
+
 
 void movePlayer(int direction) {
     playerTrack += direction;  // Ajuste para que o jogador se mova apenas entre as linhas
@@ -84,6 +88,9 @@ void displayGame(int playerTrack) {
         printf("%s", track[i]);
         fflush(stdout);
     }
+        screenGotoxy(12, baseLine + PISTAS * lineSpacing + 2);  // Posição abaixo das pistas
+        printf("Score: %d", score);  // Exibe a pontuação
+        fflush(stdout);
     // Posiciona o jogador entre as linhas, não diretamente sobre elas
     screenGotoxy(12, baseLine + (playerTrack * lineSpacing) + 1);
     printf(">");
