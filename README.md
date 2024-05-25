@@ -50,3 +50,32 @@ Para executar o Corrida virtual 2D, siga estas etapas:
     gkci@cesar.school 📩
   </li>
 </ul>
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/daviruy61">
+        <img src="https://avatars3.githubusercontent.com/daviruy61" width="100px;" alt="Foto de Davi"/><br>
+        <sub>
+          <b>Davi Gomes</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/marceloh090">
+        <img src="https://avatars.githubusercontent.com/marceloh090" width="100px;" alt="Foto de Marcelo"/><br>
+        <sub>
+          <b>Marcelo Henrique</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/dekenner">
+        <img src="https://avatars.githubusercontent.com/dekenner" width="100px;" alt="Foto de Gabriel"/><br>
+        <sub>
+          <b>Gabriel Ken</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
