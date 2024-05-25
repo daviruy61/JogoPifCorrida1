@@ -42,7 +42,7 @@ Para executar o Corrida virtual 2D, siga estas etapas:
     dgfra@cesar.school 📩
   </li>
   <li>
-    <a href="https://github.com/">Marcelo Henrique</a> -
+    <a href="https://github.com/marceloh090">Marcelo Henrique</a> -
     mhbp@cesar.school 📩
   </li>
   <li>
