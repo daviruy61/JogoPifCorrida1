@@ -16,7 +16,7 @@ Para executar o Corrida virtual 2D, siga estas etapas:
 
 ## INICIANDO O JOGO
 
-1. A Corrida 2D abrirá um painel em que é navegar por 3 opções: Iniciar, Ranking e Sair.
+1. A Corrida 2D abrirá um painel em que o jogador poderá navegar por 3 opções: Iniciar, Ranking e Sair.
 
 2. Se "Iniciar" for selecionado, o jogo limpará a tela e mostrará as 5 pistas pelas quais o carro pode transitar.
 
@@ -29,7 +29,7 @@ Para executar o Corrida virtual 2D, siga estas etapas:
 6. Esse nome inserido será armazenado junto com a pontuação dos jogadores.
 
 7. Caso os participantes queiram ver suas colocações, basta ir ao Menu principal e selecionar a opção exibir ranking.
-- Nesta opção, estarão os nomes dos participantes com as melhores colocações e suas pontuações por ranking.
+- Nesta opção, estarão os nomes dos jogadores com as melhores colocações e suas pontuações por ranking.
 
 8. Para encerrar o Corrida 2D, é necessário que o jogador escolha a opção sair no Menu principal, e o jogo se fechará automaticamente.
 
