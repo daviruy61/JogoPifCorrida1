@@ -3,7 +3,7 @@
 ## PASSO A PASSO PARA JOGAR O JOGO DE CORRIDA 2D
 
 
-Para executar o Pong2, siga estas etapas:
+Para executar o Corrida virtual 2D, siga estas etapas:
 
 1. Clone este repositório em sua máquina:
    `git clone https://github.com/daviruy61/JogoPifCorrida1.git`
@@ -16,7 +16,7 @@ Para executar o Pong2, siga estas etapas:
 
 ## INICIANDO O JOGO
 
-1. A Corrida 2D abrirá um painel em que é possível selecionar 3 opções: 1-Iniciar, 2-Ranking e 3-Sair.
+1. A Corrida 2D abrirá um painel em que é navegar por 3 opções: Iniciar, Ranking e Sair.
 
 2. Se "Iniciar" for selecionado, o jogo limpará a tela e mostrará as 5 pistas pelas quais o carro pode transitar.
 
@@ -35,3 +35,18 @@ Para executar o Pong2, siga estas etapas:
 
 
 ## CONTRIBUINTES
+
+<ul>
+  <li>
+    <a href="https://github.com/daviruy61">Davi Gomes</a> -
+    dgfra@cesar.school 📩
+  </li>
+  <li>
+    <a href="https://github.com/">Marcelo Henrique</a> -
+    mhbp@cesar.school 📩
+  </li>
+  <li>
+    <a href="https://github.com/dekenner">Gabriel Ken</a> -
+    gkci@cesar.school 📩
+  </li>
+</ul>
