@@ -6,7 +6,7 @@
 Para executar o Pong2, siga estas etapas:
 
 1. Clone este repositório em sua máquina:
-   `git clone `
+   `git clone https://github.com/daviruy61/JogoPifCorrida1.git`
 
 3. Compile o programa:
    `gcc -o corrida main.c keyboard.c screen.c timer.c`
