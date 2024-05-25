@@ -1,17 +1,20 @@
 # JOGO DE CORRIDA 2D - PIF
 
-**PASSO A PASSO PARA JOGAR O JOGO DE CORRIDA 2D**
+## PASSO A PASSO PARA JOGAR O JOGO DE CORRIDA 2D
 
-Primeiro é necessário verificar que as bibliotecas e o arquivo main.c que estão presentes no GitHub estão no mesmo arquivo diretório da sua máquina e rodar a seguinte linha de comando:
-```
-gcc -o corrida main.c keyboard.c screen.c timer.c
-```
-Logo em seguida, digitar essa segunda linha:
-```
-./corrida
-```
 
-- INICIANDO O JOGO
+Para executar o Pong2, siga estas etapas:
+
+1. Clone este repositório em sua máquina:
+   `git clone `
+
+3. Compile o programa:
+   `gcc -o corrida main.c keyboard.c screen.c timer.c`
+
+4. Rode o programa:
+   `./corrida`
+
+## INICIANDO O JOGO
 
 1. A Corrida 2D abrirá um painel em que é possível selecionar 3 opções: 1-Iniciar, 2-Ranking e 3-Sair.
 
@@ -29,3 +32,6 @@ Logo em seguida, digitar essa segunda linha:
 - Nesta opção, estarão os nomes dos participantes com as melhores colocações e suas pontuações por ranking.
 
 8. Para encerrar o Corrida 2D, é necessário que o jogador escolha a opção sair no Menu principal, e o jogo se fechará automaticamente.
+
+
+## CONTRIBUINTES
