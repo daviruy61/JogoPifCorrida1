@@ -60,6 +60,7 @@ void runGame() {
         if (timerTimeOver()) {
             updateObstacles();   //Atualiza os obstáculos (ignorado por agora)
             score++;  // Incrementa a pontuação
+            //screenUpdate();
             timerUpdateTimer(100);  // Reinicia o temporizador para 100 milissegundos
         }
 
@@ -74,9 +75,17 @@ void movePlayer(int direction) {
 }
 
 void updateObstacles() {
-    for (int i = 1; i < PISTAS - 1; i++) { // Ainda evita a primeira e última linha de borda
-        memmove(&track[i][0], &track[i][1], DISTANCIA_PISTA - 1);
-        // Não mais gerando obstáculos aqui, mantendo o foco em outras lógicas de atualização
+    for (int i = 1; i < PISTAS - 1; i++) {  // Evita a primeira e última linha de borda
+        for (int j = 1; j < DISTANCIA_PISTA; j++) {
+            if (track[i][j] == '#') {  // Se encontrar um obstáculo
+                if (j > 1) {  // Certifica-se de que não está no começo da pista
+                    track[i][j-1] = '#';  // Move o obstáculo para a esquerda
+                    track[i][j] = ' ';  // Limpa a posição original
+                } else {
+                    track[i][j] = ' ';  // Limpa o obstáculo se ele chegar no início da pista
+                }
+            }
+        }
     }
 }
 
