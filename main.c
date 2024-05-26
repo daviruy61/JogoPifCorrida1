@@ -129,15 +129,12 @@ void displayGame(int playerTrack) {
         
         screenGotoxy(12, linhabasepista + i * espacamento); //gotoxy x=colunas e y=linhas
         printf("%s", track[i]);
-        fflush(stdout);
     }
 
     screenGotoxy(12, linhabasepista + PISTAS * espacamento + 2);  // Posição abaixo das pistas
     printf("Score: %d", score);  // Exibe a pontuação
-    fflush(stdout);
     
     // Posiciona o jogador entre as linhas, não diretamente sobre elas
     screenGotoxy(12, linhabaserua + playerTrack * espacamento);
     printf(">");
-    fflush(stdout);
 }
