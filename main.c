@@ -18,7 +18,7 @@ int score = 0; //pontuação inicial
 int probabilidadeobstaculo = 6; // probabilidade inicial de aparecer um obstaculo é 6
 int incrementardificuldade = 0; // variavel pro score não bugar
 int playerTrack = 2;  // Começa entre track[2] e track[3](meio)
-char track[PISTAS][DISTANCIA_PISTA + 1];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
+char track[PISTAS][DISTANCIA_PISTA];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
 char obstacles[PISTAS][DISTANCIA_PISTA];  // Matriz separada para obstáculos
 
 int main() {
