@@ -15,8 +15,11 @@ void updateObstacles();
 void displayGame(int playerTrack);
 
 int score = 0; //pontuação inicial
+int probabilidadeobstaculo = 6; // probabilidade inicial de aparecer um obstaculo é 6
+int incrementardificuldade = 0; // variavel pro score não bugar
 int playerTrack = 2;  // Começa entre track[2] e track[3](meio)
 char track[PISTAS][DISTANCIA_PISTA + 1];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
+char obstacles[PISTAS][DISTANCIA_PISTA];  // Matriz separada para obstáculos
 
 int main() {
     screenInit(1);
@@ -34,12 +37,15 @@ int main() {
 }
 
 void initializeGame() {
-    strcpy(track[0], "========================================"); // pistas
+    // Inicializa as pistas
+    strcpy(track[0], "========================================");
     strcpy(track[1], "----------------------------------------"); 
     strcpy(track[2], "----------------------------------------"); 
     strcpy(track[3], "----------------------------------------"); 
     strcpy(track[4], "----------------------------------------");
     strcpy(track[5], "========================================");
+    // Inicializa obstáculos
+    memset(obstacles, ' ', sizeof(obstacles));  // Limpa a matriz de obstáculos
 }
 
 void runGame() {
@@ -55,6 +61,10 @@ void runGame() {
             } else if ((key == 's' || key == 'S') && playerTrack < PISTAS - 2) {
                 movePlayer(1);
             }
+        }
+        if (score % 100 == 0 && score != 0 && score > incrementardificuldade) {
+            probabilidadeobstaculo++;  // Aumenta a chance de geração de obstáculos em 1%
+            incrementardificuldade = score;
         }
 
         if (timerTimeOver()) {
@@ -75,45 +85,52 @@ void movePlayer(int direction) {
 }
 
 void updateObstacles() {
-    for (int i = 1; i < PISTAS - 1; i++) {  // Evita a primeira e última linha de borda
+    int linhabase = 4;
+    int espaçamentoobstaculo = 2;
+    int startPosition = 38; // Posição dentro da matriz de obstáculos que reflete screenGotoxy(50, ...)
+    // Mover obstáculos para a esquerda
+    for (int i = 0; i < PISTAS - 1; i++) {
         for (int j = 1; j < DISTANCIA_PISTA; j++) {
-            if (track[i][j] == '#') {  // Se encontrar um obstáculo
-                if (j > 1) {  // Certifica-se de que não está no começo da pista
-                    track[i][j-1] = '#';  // Move o obstáculo para a esquerda
-                    track[i][j] = ' ';  // Limpa a posição original
-                } else {
-                    track[i][j] = ' ';  // Limpa o obstáculo se ele chegar no início da pista
-                }
-            }
+            obstacles[i][j-1] = obstacles[i][j];
+            obstacles[i][j] = ' ';
+        }
+    }
+
+    // Gerar novos obstáculos aleatoriamente na última coluna
+    for (int i = 0; i < PISTAS - 1; i++) {
+        if (rand() % 100 < probabilidadeobstaculo) {
+            obstacles[i][DISTANCIA_PISTA - 1] = '#';
         }
     }
 }
 
 
 
+
 void displayGame(int playerTrack) {
-    int baseLine = 3; // Base line for display
-    int lineSpacing = 2; // Line spacing for better visibility
+    int linhabasepista = 3; // linha das pistas
+    int linhabaserua = 4; //linha do jogador e dos obstaculos
+    int espacamento = 2; // espaçamento
     for (int i = 0; i < PISTAS; i++) {
-        screenGotoxy(12, baseLine + i * lineSpacing); //gotoxy x=colunas e y=linhas
+        screenGotoxy(12, linhabasepista + i * espacamento); //gotoxy x=colunas e y=linhas
+        for (int j = 0; j < DISTANCIA_PISTA; j++) {
+            if (obstacles[i][j] == '#') {
+                screenGotoxy(12 + j, linhabaserua + i * espacamento); // Posiciona os obstaculos na tela
+                printf("#");
+            }
+        }
+        
+        screenGotoxy(12, linhabasepista + i * espacamento); //gotoxy x=colunas e y=linhas
         printf("%s", track[i]);
         fflush(stdout);
     }
-    
-    // Gera obstáculos
-    for (int i = 0; i < PISTAS - 1; i++) { // Subtrai 1 para evitar a última linha
-        if (rand() % 10 < 2) { // Aproximadamente 20% de chance de um obstáculo aparecer
-            screenGotoxy(12 + DISTANCIA_PISTA - 2, (baseLine + i * lineSpacing) + 1);
-            printf("#");
-        }
-    }
 
-    screenGotoxy(12, baseLine + PISTAS * lineSpacing + 2);  // Posição abaixo das pistas
+    screenGotoxy(12, linhabasepista + PISTAS * espacamento + 2);  // Posição abaixo das pistas
     printf("Score: %d", score);  // Exibe a pontuação
     fflush(stdout);
     
     // Posiciona o jogador entre as linhas, não diretamente sobre elas
-    screenGotoxy(12, baseLine + (playerTrack * lineSpacing) + 1 );
+    screenGotoxy(12, linhabaserua + playerTrack * espacamento);
     printf(">");
     fflush(stdout);
 }
