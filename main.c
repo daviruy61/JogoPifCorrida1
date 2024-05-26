@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define PISTAS 6
-#define DISTANCIA_PISTA 40
+#define DISTANCIA_PISTA 60
 
 void initializeGame();
 void runGame();
@@ -50,9 +50,10 @@ void initializeGame() {
 
 void runGame() {
     char key;
+    int colisao = 0; // Define se houve colisão ou não
     do {
         screenClear();
-        displayGame(playerTrack); //exibe o jogo
+        displayGame(playerTrack); //Exibe o jogo
 
         if (keyhit()) {
             key = readch();
@@ -73,6 +74,12 @@ void runGame() {
             //screenUpdate();
             timerUpdateTimer(100);  // Reinicia o temporizador para 100 milissegundos
         }
+        // Verifica se há colisão entre o jogador e um obstáculo
+        if (obstacles[playerTrack][0] == '#') {  // Verificar se a posição do jogador é igual ao de um obstaculo
+            colisao = 1;  // Marca o jogo como terminado
+            printf("\nGame Over! Você colidiu com um obstáculo.\n");
+            break;  // Sai do loop do jogo
+        }
 
         screenUpdate();
     } while (key != 'q');
@@ -87,7 +94,7 @@ void movePlayer(int direction) {
 void updateObstacles() {
     int linhabase = 4;
     int espaçamentoobstaculo = 2;
-    int startPosition = 38; // Posição dentro da matriz de obstáculos que reflete screenGotoxy(50, ...)
+    int posicaoinicial = 38; // Posição dentro da matriz de obstáculos que reflete screenGotoxy(50, ...)
     // Mover obstáculos para a esquerda
     for (int i = 0; i < PISTAS - 1; i++) {
         for (int j = 1; j < DISTANCIA_PISTA; j++) {
@@ -99,7 +106,7 @@ void updateObstacles() {
     // Gerar novos obstáculos aleatoriamente na última coluna
     for (int i = 0; i < PISTAS - 1; i++) {
         if (rand() % 100 < probabilidadeobstaculo) {
-            obstacles[i][DISTANCIA_PISTA - 1] = '#';
+            obstacles[i][posicaoinicial] = '#';
         }
     }
 }
