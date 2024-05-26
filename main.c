@@ -15,7 +15,7 @@ void updateObstacles();
 void displayGame(int playerTrack);
 
 int score = 0; //pontuação inicial
-int playerTrack = 1;  // Começa entre track[1] e track[2]
+int playerTrack = 2;  // Começa entre track[2] e track[3](meio)
 char track[PISTAS][DISTANCIA_PISTA + 1];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
 
 int main() {
@@ -58,7 +58,7 @@ void runGame() {
         }
 
         if (timerTimeOver()) {
-            //updateObstacles();   Atualiza os obstáculos (ignorado por agora)
+            updateObstacles();   //Atualiza os obstáculos (ignorado por agora)
             score++;  // Incrementa a pontuação
             timerUpdateTimer(100);  // Reinicia o temporizador para 100 milissegundos
         }
@@ -74,11 +74,13 @@ void movePlayer(int direction) {
 }
 
 void updateObstacles() {
-    for (int i = 0; i < PISTAS; i++) {
+    for (int i = 1; i < PISTAS - 1; i++) { // Ainda evita a primeira e última linha de borda
         memmove(&track[i][0], &track[i][1], DISTANCIA_PISTA - 1);
-        track[i][DISTANCIA_PISTA - 1] = (rand() % 10 < 2) ? '#' : track[i][DISTANCIA_PISTA - 2];
+        // Não mais gerando obstáculos aqui, mantendo o foco em outras lógicas de atualização
     }
 }
+
+
 
 void displayGame(int playerTrack) {
     int baseLine = 3; // Base line for display
@@ -88,11 +90,21 @@ void displayGame(int playerTrack) {
         printf("%s", track[i]);
         fflush(stdout);
     }
-        screenGotoxy(12, baseLine + PISTAS * lineSpacing + 2);  // Posição abaixo das pistas
-        printf("Score: %d", score);  // Exibe a pontuação
-        fflush(stdout);
+    
+    // Gera obstáculos
+    for (int i = 0; i < PISTAS - 1; i++) { // Subtrai 1 para evitar a última linha
+        if (rand() % 10 < 2) { // Aproximadamente 20% de chance de um obstáculo aparecer
+            screenGotoxy(12 + DISTANCIA_PISTA - 2, (baseLine + i * lineSpacing) + 1);
+            printf("#");
+        }
+    }
+
+    screenGotoxy(12, baseLine + PISTAS * lineSpacing + 2);  // Posição abaixo das pistas
+    printf("Score: %d", score);  // Exibe a pontuação
+    fflush(stdout);
+    
     // Posiciona o jogador entre as linhas, não diretamente sobre elas
-    screenGotoxy(12, baseLine + (playerTrack * lineSpacing) + 1);
+    screenGotoxy(12, baseLine + (playerTrack * lineSpacing) + 1 );
     printf(">");
     fflush(stdout);
 }
