@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 #define PISTAS 6
-#define DISTANCIA_PISTA 60
+#define DISTANCIA_PISTA 165
 
 void initializeGame();
 void runGame();
@@ -31,12 +31,12 @@ int main() {
     keyboardInit();
     timerInit(100);
 
-    char choice;
+    char escolhadousuario;
     do {
         displayMenu();
-        choice = getPlayerInput();
+        escolhadousuario = getPlayerInput();
 
-        switch (choice) {
+        switch (escolhadousuario) {
             case '1':
                 initializeGame();
                 runGame();
@@ -45,7 +45,7 @@ int main() {
                 changeCharacter();
                 break;
         }
-    } while (choice != 'q');
+    } while (escolhadousuario != 'q');
 
     screenDestroy();
     keyboardDestroy();
@@ -61,6 +61,8 @@ void displayMenu() {
     screenGotoxy(10, 7);
     printf("2) Trocar de Personagem");
     screenGotoxy(10, 9);
+    printf("3) Exibir placar");
+    screenGotoxy(10, 11);
     printf("Pressione 'q' para sair");
     screenUpdate();
 }
@@ -110,12 +112,12 @@ void changeCharacter() {
 
 void initializeGame() {
     // Inicializa as pistas
-    strcpy(track[0], "=========================================");
-    strcpy(track[1], "-----------------------------------------"); 
-    strcpy(track[2], "-----------------------------------------"); 
-    strcpy(track[3], "-----------------------------------------"); 
-    strcpy(track[4], "-----------------------------------------");
-    strcpy(track[5], "=========================================");
+    strcpy(track[0], "🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰");
+    strcpy(track[1], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
+    strcpy(track[2], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
+    strcpy(track[3], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
+    strcpy(track[4], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖");
+    strcpy(track[5], "🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰");
     // Inicializa obstáculos
     memset(obstacles, ' ', sizeof(obstacles));  // Limpa a matriz de obstáculos
 }
@@ -149,7 +151,9 @@ void runGame() {
         // Verifica se há colisão entre o jogador e um obstáculo
         if (obstacles[playerTrack][0] == '#' || obstacles[playerTrack][0] == '@' || obstacles[playerTrack][0] == '%' || obstacles[playerTrack][0] == '&') {  // Verificar se a posição do jogador é igual ao de um obstaculo
             colisao = 1;  // Marca o jogo como terminado
+            screenClear();
             printf("\nGame Over! Você colidiu com um obstáculo.\n");
+            sleep(2);
             score = 0;
             probabilidadeobstaculo = 6;
             break;  // Sai do loop do jogo
@@ -214,7 +218,7 @@ void displayGame(int playerTrack) {
     printf("Score: %d", score);  // Exibe a pontuação
     //printf (" dificuldade: %d", probabilidadeobstaculo); // teste
     
-    // Posiciona o jogador entre as linhas, não diretamente sobre elas
+    // Posiciona o jogador entre as pistas (track[])
     screenGotoxy(13, linhabaserua + playerTrack * espacamento);
     printf("%c", simbolojogador);
 }
