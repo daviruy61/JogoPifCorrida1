@@ -22,7 +22,7 @@ int score = 0; //pontuação inicial
 int probabilidadeobstaculo = 6; // probabilidade inicial de aparecer um obstaculo é 6
 int incrementardificuldade = 0; // variavel pro score não bugar
 int playerTrack = 2;  // Começa entre track[2] e track[3](meio)
-char simbolojogador = '>';  // carro
+char *simbolojogador = "🚓";  // carro
 char track[PISTAS][DISTANCIA_PISTA];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
 char obstacles[PISTAS][DISTANCIA_PISTA];  // Matriz separada para obstáculos
 
@@ -83,11 +83,11 @@ void changeCharacter() {
     screenGotoxy(10, 5);
     printf("Escolha um personagem:");
     screenGotoxy(10, 7);
-    printf("1) B");
+    printf("1) 🐎");
     screenGotoxy(10, 9);
-    printf("2) 3");
+    printf("2) ⏩");
     screenGotoxy(10, 11);
-    printf("3) >");
+    printf("3) 🚓");
     screenUpdate();
 
     char key;
@@ -98,13 +98,13 @@ void changeCharacter() {
         key = readch();
         switch (key) {
             case '1':
-                simbolojogador = 'B';
+                simbolojogador = "🐎";
                 break;
             case '2':
-                simbolojogador = '3';
+                simbolojogador = "⏩";
                 break;
             case '3':
-                simbolojogador = '>';
+                simbolojogador = "🚓";
                 break;
         }
     } while (key != '1' && key != '2' && key != '3');
@@ -124,7 +124,8 @@ void initializeGame() {
 
 void runGame() {
     char key;
-    int colisao = 0; // Define se houve colisão ou não
+    char nomejogador[21];
+    //int colisao = 0; // Define se houve colisão ou não
     do {
         screenClear();
         displayGame(playerTrack); //Exibe o jogo
@@ -150,10 +151,14 @@ void runGame() {
         }
         // Verifica se há colisão entre o jogador e um obstáculo
         if (obstacles[playerTrack][0] == '#' || obstacles[playerTrack][0] == '@' || obstacles[playerTrack][0] == '%' || obstacles[playerTrack][0] == '&') {  // Verificar se a posição do jogador é igual ao de um obstaculo
-            colisao = 1;  // Marca o jogo como terminado
+            //colisao = 1;  // Marca o jogo como terminado
             screenClear();
             printf("\nGame Over! Você colidiu com um obstáculo.\n");
             sleep(2);
+            screenShowCursor();
+            printf("Digite seu nome: ");
+            scanf("%20s", nomejogador);
+            screenHideCursor();
             score = 0;
             probabilidadeobstaculo = 6;
             break;  // Sai do loop do jogo
@@ -220,5 +225,5 @@ void displayGame(int playerTrack) {
     
     // Posiciona o jogador entre as pistas (track[])
     screenGotoxy(13, linhabaserua + playerTrack * espacamento);
-    printf("%c", simbolojogador);
+    printf("%s", simbolojogador);
 }

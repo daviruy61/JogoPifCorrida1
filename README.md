@@ -1,6 +1,6 @@
 # JOGO DE CORRIDA 2D - PIF
 
-## PASSO A PASSO PARA JOGAR O JOGO DE CORRIDA 2D
+## PASSO A PASSO PARA JOGAR O JOGO DE CORRIDA MAKEFILE
 
 
 Para executar o Corrida virtual 2D, siga estas etapas:
