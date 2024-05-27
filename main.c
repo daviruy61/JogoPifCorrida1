@@ -71,7 +71,7 @@ void runGame() {
         if (timerTimeOver()) {
             updateObstacles();   //Atualiza os obstáculos (ignorado por agora)
             score++;  // Incrementa a pontuação
-            //screenUpdate();
+            screenUpdate();
             timerUpdateTimer(100);  // Reinicia o temporizador para 100 milissegundos
         }
         // Verifica se há colisão entre o jogador e um obstáculo
