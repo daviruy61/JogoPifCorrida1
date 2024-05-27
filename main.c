@@ -1,6 +1,8 @@
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
+#include "funcaoarquivo.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,14 +11,18 @@
 #define PISTAS 6
 #define DISTANCIA_PISTA 165
 
+void displayMenu();
+char getPlayerInput();
+void changeCharacter();
 void initializeGame();
 void runGame();
 void movePlayer(int direction);
 void updateObstacles();
 void displayGame(int playerTrack);
-void displayMenu();
-void changeCharacter();
-char getPlayerInput();
+void lerPlacar(Jogador placar[]);
+void salvarPlacar(Jogador placar[]);
+void inserirNoPlacar(Jogador placar[], char nome[], int pontos);
+
 
 int score = 0; //pontuação inicial
 int probabilidadeobstaculo = 6; // probabilidade inicial de aparecer um obstaculo é 6
@@ -125,6 +131,7 @@ void initializeGame() {
 void runGame() {
     char key;
     char nomejogador[21];
+    Jogador placar[MAX_JOGADORES]; // Array de jogadores para o placar
     //int colisao = 0; // Define se houve colisão ou não
     do {
         screenClear();
@@ -158,6 +165,10 @@ void runGame() {
             screenShowCursor();
             printf("Digite seu nome: ");
             scanf("%20s", nomejogador);
+
+            inserirNoPlacar(placar, nomejogador, score); // Insere o jogador no placar se for top 5
+            salvarPlacar(placar); // Salva o placar atualizado no arquivo
+
             screenHideCursor();
             score = 0;
             probabilidadeobstaculo = 6;
