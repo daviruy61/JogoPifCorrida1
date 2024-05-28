@@ -36,7 +36,7 @@ void exibirPlacar();
 
 //variaveis globais
 int score = 0; //pontuação inicial
-int probabilidadeobstaculo = 5; // probabilidade inicial de aparecer um obstaculo é 5
+int probabilidadeobstaculo = 4; // probabilidade inicial de aparecer um obstaculo é 5
 int incrementardificuldade = 0; // variavel pro score não bugar
 int playerTrack = 2;  // Começa entre track[2] e track[3](meio)
 char *simbolojogador = "🚓";  // carro
@@ -144,6 +144,7 @@ void changeCharacter() {
 }
 
 void initializeGame() {
+    screenClear();
     // Inicializa as pistas
     strcpy(track[0], "🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰");
     strcpy(track[1], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
@@ -164,7 +165,6 @@ void runGame() {
     screenHideCursor();
 
     do {
-        screenClear();
         displayGame(playerTrack); // Exibe o jogo
 
         if (keyhit()) {
@@ -206,7 +206,7 @@ void runGame() {
             sleep(2); // Mostra a mensagem por 2 segundos
 
             score = 0;
-            probabilidadeobstaculo = 5;
+            probabilidadeobstaculo = 4;
             break; // Sai do loop do jogo
         }
 
@@ -215,7 +215,7 @@ void runGame() {
 
     // Reseta o jogo
     score = 0;
-    probabilidadeobstaculo = 5;
+    probabilidadeobstaculo = 4;
 }
 
 
@@ -248,33 +248,35 @@ void updateObstacles() {
 }
 
 
-
-
 void displayGame(int playerTrack) {
     int linhabasepista = 3; // linha das pistas
     int linhabaserua = 4; //linha do jogador e dos obstaculos
     int espacamento = 2; // espaçamento
+    
+    // Desenha as pistas
     for (int i = 0; i < PISTAS; i++) {
-        screenGotoxy(12, linhabasepista + i * espacamento); //gotoxy x=colunas e y=linhas
-        for (int j = 0; j < DISTANCIA_PISTA ; j++) {
-            char currentObstacle = obstacles[i][j];
-            if (currentObstacle == '#' || currentObstacle == '@' || currentObstacle == '%' || currentObstacle == '&') {
-                screenGotoxy(13 + j, linhabaserua + i * espacamento); // Posiciona os obstaculos na tela
-                printf("%c", currentObstacle);
-            }
-        }
-        
-        screenGotoxy(12, linhabasepista + i * espacamento); // imprimir as pistas
+        screenGotoxy(12, linhabasepista + i * espacamento);
         printf("%s", track[i]);
     }
 
-    screenGotoxy(12, linhabasepista + PISTAS * espacamento + 2);  // Posição abaixo das pistas
-    printf("Score: %d", score);  // Exibe a pontuação
-    //printf (" dificuldade: %d", probabilidadeobstaculo); // teste
-    
-    // Posiciona o jogador entre as pistas (track[])
+    // Atualiza os obstáculos
+    for (int i = 0; i < PISTAS; i++) {
+        for (int j = 0; j < DISTANCIA_PISTA; j++) {
+            screenGotoxy(13 + j, linhabaserua + i * espacamento); // Posiciona os obstáculos na tela
+            printf("%c", obstacles[i][j]);  // Desenha o obstáculo
+        }
+    }
+
+    // Desenha o jogador na nova posição
     screenGotoxy(13, linhabaserua + playerTrack * espacamento);
     printf("%s", simbolojogador);
+
+    // Atualiza a tela
+    screenUpdate();
+
+    //score
+    screenGotoxy(12, linhabasepista + PISTAS * espacamento + 2);  // Posição abaixo das pistas
+    printf("Score: %d", score);  // Exibe a pontuação
 }
 
 void lerPlacar(Jogador placar[]) {
