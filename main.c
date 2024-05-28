@@ -40,7 +40,7 @@ int probabilidadeobstaculo = 5; // probabilidade inicial de aparecer um obstacul
 int incrementardificuldade = 0; // variavel pro score não bugar
 int playerTrack = 2;  // Começa entre track[2] e track[3](meio)
 char *simbolojogador = "🚓";  // carro
-char track[PISTAS][DISTANCIA_PISTA];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
+char **track; //ponteiro de ponteiro para pistas // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
 char obstacles[PISTAS][DISTANCIA_PISTA];  // Matriz separada para obstáculos
 
 
@@ -48,6 +48,12 @@ int main() {
     screenInit(1);
     keyboardInit();
     timerInit(100);
+
+    //alocaçao dinamica das pistas
+    track = (char **)malloc(PISTAS * sizeof(char *));
+    for (int i = 0; i < PISTAS; i++) {
+        track[i] = (char *)malloc(DISTANCIA_PISTA * sizeof(char));
+    }
 
     char escolhadousuario;
     do {
@@ -67,6 +73,12 @@ int main() {
                 break;
         }
     } while (escolhadousuario != 'q');
+
+    //liberar memoria da pista
+    for (int i = 0; i < PISTAS; i++) {
+        free(track[i]);
+    }
+    free(track);
 
     screenDestroy();
     keyboardDestroy();
