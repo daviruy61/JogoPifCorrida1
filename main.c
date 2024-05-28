@@ -26,9 +26,8 @@ char getPlayerInput();
 void changeCharacter();
 void initializeGame();
 void runGame();
-void movePlayer(int direction);
 void updateObstacles();
-void displayGame(int playerTrack);
+void displayGame(int playerLugar);
 void lerPlacar(Jogador placar[]);
 void salvarPlacar(Jogador placar[]);
 void inserirNoPlacar(Jogador placar[], char nome[], int pontos);
@@ -38,9 +37,9 @@ void exibirPlacar();
 int score = 0; //pontuação inicial
 int probabilidadeobstaculo = 4; // probabilidade inicial de aparecer um obstaculo é 5
 int incrementardificuldade = 0; // variavel pro score não bugar
-int playerTrack = 2;  // Começa entre track[2] e track[3](meio)
+int playerLugar = 2;  // Começa entre pista[2] e pista[3](meio)
 char *simbolojogador = "🚓";  // carro
-char **track; //ponteiro de ponteiro para pistas // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
+char **pista; //ponteiro de ponteiro para pistas // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays pista
 char obstacles[PISTAS][DISTANCIA_PISTA];  // Matriz separada para obstáculos
 
 
@@ -50,9 +49,9 @@ int main() {
     timerInit(100);
 
     //alocaçao dinamica das pistas
-    track = (char **)malloc(PISTAS * sizeof(char *));
+    pista = (char **)malloc(PISTAS * sizeof(char *));
     for (int i = 0; i < PISTAS; i++) {
-        track[i] = (char *)malloc(DISTANCIA_PISTA * sizeof(char));
+        pista[i] = (char *)malloc(DISTANCIA_PISTA * sizeof(char));
     }
 
     char escolhadousuario;
@@ -76,9 +75,9 @@ int main() {
 
     //liberar memoria da pista
     for (int i = 0; i < PISTAS; i++) {
-        free(track[i]);
+        free(pista[i]);
     }
-    free(track);
+    free(pista);
 
     screenDestroy();
     keyboardDestroy();
@@ -86,6 +85,7 @@ int main() {
 
     return 0;
 }
+
 
 void displayMenu() {
     screenClear();
@@ -100,6 +100,7 @@ void displayMenu() {
     screenUpdate();
 }
 
+
 char getPlayerInput() {
     char key;
     do {
@@ -110,6 +111,7 @@ char getPlayerInput() {
     } while (key != '1' && key != '2' && key != '3' && key != 'q');
     return key;
 }
+
 
 void changeCharacter() {
     screenClear();
@@ -143,18 +145,20 @@ void changeCharacter() {
     } while (key != '1' && key != '2' && key != '3');
 }
 
+
 void initializeGame() {
     screenClear();
     // Inicializa as pistas
-    strcpy(track[0], "🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰");
-    strcpy(track[1], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
-    strcpy(track[2], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
-    strcpy(track[3], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
-    strcpy(track[4], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖");
-    strcpy(track[5], "🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰");
+    strcpy(pista[0], "🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰");
+    strcpy(pista[1], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
+    strcpy(pista[2], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
+    strcpy(pista[3], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"); 
+    strcpy(pista[4], "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖");
+    strcpy(pista[5], "🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰");
     // Inicializa obstáculos
     memset(obstacles, ' ', sizeof(obstacles));  // Limpa a matriz de obstáculos
 }
+
 
 void runGame() {
     char key;
@@ -165,14 +169,14 @@ void runGame() {
     screenHideCursor();
 
     do {
-        displayGame(playerTrack); // Exibe o jogo
+        displayGame(playerLugar); // Exibe o jogo
 
         if (keyhit()) {
             key = readch();
-            if ((key == 'w' || key == 'W' || key == up) && playerTrack > 0) {
-                movePlayer(-1);
-            } else if ((key == 's' || key == 'S' || key == down) && playerTrack < PISTAS - 2) {
-                movePlayer(1);
+            if ((key == 'w' || key == 'W' || key == up) && playerLugar > 0) {
+                playerLugar--;
+            } else if ((key == 's' || key == 'S' || key == down) && playerLugar < PISTAS - 2) {
+                playerLugar++;
             }
         }
         if (score % 100 == 0 && score != 0 && score > incrementardificuldade) {
@@ -188,7 +192,7 @@ void runGame() {
         }
 
         // Verifica se há colisão entre o jogador e um obstáculo
-        if (obstacles[playerTrack][0] == '#' || obstacles[playerTrack][0] == '@' || obstacles[playerTrack][0] == '%' || obstacles[playerTrack][0] == '&') {
+        if (obstacles[playerLugar][0] == '#' || obstacles[playerLugar][0] == '@' || obstacles[playerLugar][0] == '%' || obstacles[playerLugar][0] == '&') {
             screenClear();
             printf("\nGame Over! Você colidiu com um obstáculo.\n");
             sleep(2);
@@ -219,12 +223,6 @@ void runGame() {
 }
 
 
-
-
-void movePlayer(int direction) {
-    playerTrack += direction;  // Ajuste para que o jogador se mova apenas entre as linhas
-}
-
 void updateObstacles() {
     int linhabase = 4;
     int espaçamentoobstaculo = 2;
@@ -248,7 +246,7 @@ void updateObstacles() {
 }
 
 
-void displayGame(int playerTrack) {
+void displayGame(int playerLugar) {
     int linhabasepista = 3; // linha das pistas
     int linhabaserua = 4; //linha do jogador e dos obstaculos
     int espacamento = 2; // espaçamento
@@ -256,7 +254,7 @@ void displayGame(int playerTrack) {
     // Desenha as pistas
     for (int i = 0; i < PISTAS; i++) {
         screenGotoxy(12, linhabasepista + i * espacamento);
-        printf("%s", track[i]);
+        printf("%s", pista[i]);
     }
 
     // Atualiza os obstáculos
@@ -268,7 +266,7 @@ void displayGame(int playerTrack) {
     }
 
     // Desenha o jogador na nova posição
-    screenGotoxy(13, linhabaserua + playerTrack * espacamento);
+    screenGotoxy(13, linhabaserua + playerLugar * espacamento);
     printf("%s", simbolojogador);
 
     // Atualiza a tela
@@ -278,6 +276,7 @@ void displayGame(int playerTrack) {
     screenGotoxy(12, linhabasepista + PISTAS * espacamento + 2);  // Posição abaixo das pistas
     printf("Score: %d", score);  // Exibe a pontuação
 }
+
 
 void lerPlacar(Jogador placar[]) {
     FILE *arquivo = fopen("placar.txt", "r");
@@ -295,6 +294,7 @@ void lerPlacar(Jogador placar[]) {
     }
 }
 
+
 void salvarPlacar(Jogador placar[]) {
     FILE *arquivo = fopen("placar.txt", "w");
     for (int i = 0; i < MAX_JOGADORES; i++) {
@@ -302,6 +302,7 @@ void salvarPlacar(Jogador placar[]) {
     }
     fclose(arquivo);
 }
+
 
 void inserirNoPlacar(Jogador placar[], char nome[], int pontos) {
     int posicao = MAX_JOGADORES;
@@ -322,6 +323,7 @@ void inserirNoPlacar(Jogador placar[], char nome[], int pontos) {
         placar[posicao].pontos = pontos;
     }
 }
+
 
 void exibirPlacar() {
     Jogador placar[MAX_JOGADORES];
