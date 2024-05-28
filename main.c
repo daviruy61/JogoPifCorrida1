@@ -7,16 +7,20 @@
 #include <string.h>
 #include <unistd.h>
 
+#define up 65
+#define down 66
 #define PISTAS 6
 #define DISTANCIA_PISTA 165
 #define MAX_JOGADORES 5
 #define TAMANHO_NOME 100
 
+// struct para placar
 typedef struct {
     char nome[TAMANHO_NOME];
     int pontos;
 } Jogador;
 
+//funções
 void displayMenu();
 char getPlayerInput();
 void changeCharacter();
@@ -30,14 +34,15 @@ void salvarPlacar(Jogador placar[]);
 void inserirNoPlacar(Jogador placar[], char nome[], int pontos);
 void exibirPlacar();
 
-
+//variaveis globais
 int score = 0; //pontuação inicial
-int probabilidadeobstaculo = 6; // probabilidade inicial de aparecer um obstaculo é 6
+int probabilidadeobstaculo = 5; // probabilidade inicial de aparecer um obstaculo é 5
 int incrementardificuldade = 0; // variavel pro score não bugar
 int playerTrack = 2;  // Começa entre track[2] e track[3](meio)
 char *simbolojogador = "🚓";  // carro
 char track[PISTAS][DISTANCIA_PISTA];  // para aumentar/diminuir numero de pistas e tamanho mude o PISTAS e a quantidade de caracteres nos arrays track
 char obstacles[PISTAS][DISTANCIA_PISTA];  // Matriz separada para obstáculos
+
 
 int main() {
     screenInit(1);
@@ -152,9 +157,9 @@ void runGame() {
 
         if (keyhit()) {
             key = readch();
-            if ((key == 'w' || key == 'W') && playerTrack > 0) {
+            if ((key == 'w' || key == 'W' || key == up) && playerTrack > 0) {
                 movePlayer(-1);
-            } else if ((key == 's' || key == 'S') && playerTrack < PISTAS - 2) {
+            } else if ((key == 's' || key == 'S' || key == down) && playerTrack < PISTAS - 2) {
                 movePlayer(1);
             }
         }
@@ -189,7 +194,7 @@ void runGame() {
             sleep(2); // Mostra a mensagem por 2 segundos
 
             score = 0;
-            probabilidadeobstaculo = 6;
+            probabilidadeobstaculo = 5;
             break; // Sai do loop do jogo
         }
 
@@ -198,7 +203,7 @@ void runGame() {
 
     // Reseta o jogo
     score = 0;
-    probabilidadeobstaculo = 6;
+    probabilidadeobstaculo = 5;
 }
 
 
@@ -320,7 +325,7 @@ void exibirPlacar() {
         }
     }
 
-    screenGotoxy(10, 6 + MAX_JOGADORES);
+    screenGotoxy(10, 12);
     printf("Pressione qualquer tecla para voltar ao menu...");
     screenUpdate(); // Atualiza a tela
 
