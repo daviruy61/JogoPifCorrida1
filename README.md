@@ -34,7 +34,7 @@ Para executar o Corrida virtual 2D, siga estas etapas:
 7. Caso os participantes queiram ver suas colocações, basta ir ao Menu principal e selecionar a opção exibir placar.
 - Nesta opção, estarão os nomes dos jogadores com as 5 melhores colocações e suas pontuações.
 
-8. Para encerrar o Corrida 2D, é necessário que o jogador aperte 'q' no Menu principal, e o jogo se fechará automaticamente.
+8. Para encerrar o Corrida 2D, é necessário que o jogador aperte 'Q' no Menu principal, e o jogo se fechará automaticamente.
 
 
 ## CONTRIBUINTES
