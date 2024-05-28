@@ -1,7 +1,6 @@
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
-#include "funcaoarquivo.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +9,13 @@
 
 #define PISTAS 6
 #define DISTANCIA_PISTA 165
+#define MAX_JOGADORES 5
+#define TAMANHO_NOME 100
+
+typedef struct {
+    char nome[TAMANHO_NOME];
+    int pontos;
+} Jogador;
 
 void displayMenu();
 char getPlayerInput();
@@ -22,6 +28,7 @@ void displayGame(int playerTrack);
 void lerPlacar(Jogador placar[]);
 void salvarPlacar(Jogador placar[]);
 void inserirNoPlacar(Jogador placar[], char nome[], int pontos);
+void exibirPlacar();
 
 
 int score = 0; //pontuação inicial
@@ -49,6 +56,9 @@ int main() {
                 break;
             case '2':
                 changeCharacter();
+                break;
+            case '3':
+                exibirPlacar();
                 break;
         }
     } while (escolhadousuario != 'q');
@@ -80,7 +90,7 @@ char getPlayerInput() {
             usleep(100000); // Aguarda até uma tecla ser pressionada
         }
         key = readch();
-    } while (key != '1' && key != '2' && key != 'q');
+    } while (key != '1' && key != '2' && key != '3' && key != 'q');
     return key;
 }
 
@@ -132,10 +142,13 @@ void runGame() {
     char key;
     char nomejogador[21];
     Jogador placar[MAX_JOGADORES]; // Array de jogadores para o placar
-    //int colisao = 0; // Define se houve colisão ou não
+
+    lerPlacar(placar); // Carrega o placar existente do arquivo
+    screenHideCursor();
+
     do {
         screenClear();
-        displayGame(playerTrack); //Exibe o jogo
+        displayGame(playerTrack); // Exibe o jogo
 
         if (keyhit()) {
             key = readch();
@@ -151,35 +164,43 @@ void runGame() {
         }
 
         if (timerTimeOver()) {
-            updateObstacles();   //Atualiza os obstáculos (ignorado por agora)
+            updateObstacles();   // Atualiza os obstáculos
             score++;  // Incrementa a pontuação
             screenUpdate();
             timerUpdateTimer(100);  // Reinicia o temporizador para 100 milissegundos
         }
+
         // Verifica se há colisão entre o jogador e um obstáculo
-        if (obstacles[playerTrack][0] == '#' || obstacles[playerTrack][0] == '@' || obstacles[playerTrack][0] == '%' || obstacles[playerTrack][0] == '&') {  // Verificar se a posição do jogador é igual ao de um obstaculo
-            //colisao = 1;  // Marca o jogo como terminado
+        if (obstacles[playerTrack][0] == '#' || obstacles[playerTrack][0] == '@' || obstacles[playerTrack][0] == '%' || obstacles[playerTrack][0] == '&') {
             screenClear();
             printf("\nGame Over! Você colidiu com um obstáculo.\n");
             sleep(2);
+            keyboardDestroy();
             screenShowCursor();
-            printf("Digite seu nome: ");
+            printf("você fez %d pontos!", score);
+            printf("\nDigite seu nome: ");
             scanf("%20s", nomejogador);
 
-            inserirNoPlacar(placar, nomejogador, score); // Insere o jogador no placar se for top 5
+            // Insere o jogador no placar se for elegível
+            inserirNoPlacar(placar, nomejogador, score);
             salvarPlacar(placar); // Salva o placar atualizado no arquivo
 
-            screenHideCursor();
+            printf("Placar atualizado.\n");
+            sleep(2); // Mostra a mensagem por 2 segundos
+
             score = 0;
             probabilidadeobstaculo = 6;
-            break;  // Sai do loop do jogo
+            break; // Sai do loop do jogo
         }
 
         screenUpdate();
     } while (key != 'q');
-      score = 0;
-      probabilidadeobstaculo = 6;
+
+    // Reseta o jogo
+    score = 0;
+    probabilidadeobstaculo = 6;
 }
+
 
 
 
@@ -237,4 +258,75 @@ void displayGame(int playerTrack) {
     // Posiciona o jogador entre as pistas (track[])
     screenGotoxy(13, linhabaserua + playerTrack * espacamento);
     printf("%s", simbolojogador);
+}
+
+void lerPlacar(Jogador placar[]) {
+    FILE *arquivo = fopen("placar.txt", "r");
+    if (arquivo == NULL) {
+        for (int i = 0; i < MAX_JOGADORES; i++) {
+            sprintf(placar[i].nome, "-");
+            placar[i].pontos = 0;
+        }
+    } else {
+        for (int i = 0; i < MAX_JOGADORES; i++) {
+            fscanf(arquivo, "%*d - %99s %d", placar[i].nome, &placar[i].pontos);
+            if (placar[i].pontos == 0) strcpy(placar[i].nome, "-");
+        }
+        fclose(arquivo);
+    }
+}
+
+void salvarPlacar(Jogador placar[]) {
+    FILE *arquivo = fopen("placar.txt", "w");
+    for (int i = 0; i < MAX_JOGADORES; i++) {
+        fprintf(arquivo, "%d - %s %d\n", i + 1, placar[i].nome, placar[i].pontos);
+    }
+    fclose(arquivo);
+}
+
+void inserirNoPlacar(Jogador placar[], char nome[], int pontos) {
+    int posicao = MAX_JOGADORES;
+    for (int i = MAX_JOGADORES - 1; i >= 0; i--) {
+        if (pontos > placar[i].pontos) {
+            posicao = i;
+        } else {
+            break;
+        }
+    }
+
+    if (posicao < MAX_JOGADORES) {
+        for (int i = MAX_JOGADORES - 1; i > posicao; i--) {
+            strcpy(placar[i].nome, placar[i - 1].nome);
+            placar[i].pontos = placar[i - 1].pontos;
+        }
+        strcpy(placar[posicao].nome, nome);
+        placar[posicao].pontos = pontos;
+    }
+}
+
+void exibirPlacar() {
+    Jogador placar[MAX_JOGADORES];
+    lerPlacar(placar); // Carrega o placar do arquivo
+
+    screenClear(); // Limpa a tela antes de exibir o placar
+    screenGotoxy(10, 3);
+    printf("Placar Atual:");
+    screenGotoxy(10, 5);
+
+    for (int i = 0; i < MAX_JOGADORES; i++) {
+        if (placar[i].pontos != 0) { // Mostra apenas entradas válidas
+            screenGotoxy(10, 6 + i);
+            printf("%d - %s: %d pontos\n", i + 1, placar[i].nome, placar[i].pontos);
+        }
+    }
+
+    screenGotoxy(10, 6 + MAX_JOGADORES);
+    printf("Pressione qualquer tecla para voltar ao menu...");
+    screenUpdate(); // Atualiza a tela
+
+    // Aguarda o usuário pressionar qualquer tecla antes de retornar ao menu
+    while (!keyhit()) {
+        usleep(100000);
+    }
+    readch(); // Lê a tecla para limpar o buffer de entrada
 }
