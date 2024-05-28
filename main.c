@@ -22,12 +22,12 @@ typedef struct {
 
 //funções
 void displayMenu();
-char getPlayerInput();
-void changeCharacter();
-void initializeGame();
+char receberInput();
+void trocarPersonagem();
+void iniciarJogo();
 void runGame();
-void updateObstacles();
-void displayGame(int playerLugar);
+void atualizarObstaculos();
+void displayJogo(int playerLugar);
 void lerPlacar(Jogador placar[]);
 void salvarPlacar(Jogador placar[]);
 void inserirNoPlacar(Jogador placar[], char nome[], int pontos);
@@ -57,15 +57,15 @@ int main() {
     char escolhadousuario;
     do {
         displayMenu();
-        escolhadousuario = getPlayerInput();
+        escolhadousuario = receberInput();
 
         switch (escolhadousuario) {
             case '1':
-                initializeGame();
+                iniciarJogo();
                 runGame();
                 break;
             case '2':
-                changeCharacter();
+                trocarPersonagem();
                 break;
             case '3':
                 exibirPlacar();
@@ -101,7 +101,7 @@ void displayMenu() {
 }
 
 
-char getPlayerInput() {
+char receberInput() {
     char key;
     do {
         while (!keyhit()) {
@@ -113,7 +113,7 @@ char getPlayerInput() {
 }
 
 
-void changeCharacter() {
+void trocarPersonagem() {
     screenClear();
     screenGotoxy(10, 5);
     printf("Escolha um personagem:");
@@ -146,7 +146,7 @@ void changeCharacter() {
 }
 
 
-void initializeGame() {
+void iniciarJogo() {
     screenClear();
     // Inicializa as pistas
     strcpy(pista[0], "🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰🟰");
@@ -169,7 +169,7 @@ void runGame() {
     screenHideCursor();
 
     do {
-        displayGame(playerLugar); // Exibe o jogo
+        displayJogo(playerLugar); // Exibe o jogo
 
         if (keyhit()) {
             key = readch();
@@ -185,7 +185,7 @@ void runGame() {
         }
 
         if (timerTimeOver()) {
-            updateObstacles();   // Atualiza os obstáculos
+            atualizarObstaculos();   // Atualiza os obstáculos
             score++;  // Incrementa a pontuação
             screenUpdate();
             timerUpdateTimer(100);  // Reinicia o temporizador para 100 milissegundos
@@ -223,7 +223,7 @@ void runGame() {
 }
 
 
-void updateObstacles() {
+void atualizarObstaculos() {
     int linhabase = 4;
     int espaçamentoobstaculo = 2;
     int posicaoinicial = 39; // Posição dentro da matriz de obstáculos que reflete screenGotoxy(50, ...)
@@ -246,7 +246,7 @@ void updateObstacles() {
 }
 
 
-void displayGame(int playerLugar) {
+void displayJogo(int playerLugar) {
     int linhabasepista = 3; // linha das pistas
     int linhabaserua = 4; //linha do jogador e dos obstaculos
     int espacamento = 2; // espaçamento
