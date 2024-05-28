@@ -6,14 +6,17 @@
 Para executar o Corrida virtual 2D, siga estas etapas:
 
 1. Clone este repositório em sua máquina:
-   `git clone https://github.com/daviruy61/JogoPifCorrida1.git`
-
+   ```
+   git clone https://github.com/daviruy61/JogoPifCorrida1.git
+   ```
 3. Compile o programa:
-   `gcc -o corrida main.c keyboard.c screen.c timer.c`
-
-4. Rode o programa:
-   `./corrida`
-
+   ```
+   gcc -o corrida main.c keyboard.c screen.c timer.c
+   ```
+5. Rode o programa:
+   ```
+   ./corrida
+   ```
 ## INICIANDO O JOGO
 
 1. A Corrida 2D abrirá um painel em que o jogador poderá navegar por 3 opções: Iniciar, Ranking e Sair.
