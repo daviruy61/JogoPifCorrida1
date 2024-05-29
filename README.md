@@ -27,14 +27,17 @@ Para executar o Corrida virtual 2D, siga estas etapas:
 
 4. Enquanto o jogador desvia dos obstáculos, irá acumular pontos.
 
-5. Quando o carro bater em algum obstáculo, o jogo parará imediatamente e exibirá na tela uma mensagem de "GAME OVER" e a sua pontuação, logo depois pedirá para você inserir seu nome.
+5. Quando o carro bater em algum obstáculo, o jogo parará imediatamente e exibirá na tela uma mensagem:
+Game Over! Você colidiu com um obstáculo. 
+Você fez X pontos! 
+Digite seu nome:
 
-6. seu nome será inserido e armazenado junto com a pontuação dos jogadores.
+6. Seu nome será inserido e armazenado junto com a pontuação dos jogadores.
 
 7. Caso os participantes queiram ver suas colocações, basta ir ao Menu principal e selecionar a opção exibir placar.
 - Nesta opção, estarão os nomes dos jogadores com as 5 melhores colocações e suas pontuações.
 
-8. Para encerrar o Corrida 2D, é necessário que o jogador aperte 'q' no Menu principal, e o jogo se fechará automaticamente.
+8. Para encerrar o Corrida 2D, é necessário que o jogador aperte 'q' no Menu Principal, e o jogo se fechará automaticamente.
 
 
 ## CONTRIBUINTES
